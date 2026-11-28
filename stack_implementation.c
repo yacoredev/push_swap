@@ -1,77 +1,77 @@
 #include "push_swap.h"
+#include "Libft/libft.h"
+#include <stdio.h>
 
-static t_stack *stack_new()
+static t_list   *creat_fill_stack(t_list  *stack_a, int argc, char **argv)
 {
-    t_stack *node;
+    t_list  *node;
+    int     *content;
+    int     i;
 
-    node = malloc(sizeof(t_stack));
-    if (!node)
-        return (NULL);
-    node->value = 0;
-    node->next = NULL;
-    return (node);
-}
-
-static void stack_add_back(t_stack **head, t_stack *node)
-{
-    if (!(*head))
+    i = 1;
+    while (i < argc)
     {
-        (*head) = node;
-        return ;
+        content = malloc(sizeof(int));
+        if (!content)
+            return (NULL);
+        *content = ft_atoi(argv[i]);
+        node = ft_lstnew(content);
+        if (!node)
+            return (NULL);
+        ft_lstadd_back(&stack_a, node);
+        i++;
     }
-    while ((*head)->next)
-        (*head) = (*head)->next;
-    (*head)->next = node;
-}
-
-static size_t  stack_size(t_stack head)
-{
-    size_t count = 0;
-
-    while (head)
-    {
-        count++;
-        head = head->next;
-    }
-    return (count);
-}
-
-static t_stack  stack_last(t_stack *head)
-{
-    while (head->next)
-        head = head->next;
-    return (head);
-}
-
-static void stack_clear(t_stack **head)
-{
-    while (head)
-    {
-        tmp = head->next;
-        free(head);
-        head = tmp;
-    }
-    head = NULL;
+    return (stack_a);
 }
 
 int main(int argc, char **argv)
 {
-    t_stack *head = NULL;
-    t_stack *node;
+    t_list *stack_a;
+    t_list *stack_b;
     size_t  size;
 
-    // stack_new() — create node.
-    node = stack_new();
+    if (argc > 1)
+    {
+        stack_a = creat_fill_stack(NULL, argc, argv);
+        if (!stack_a)
+            return (1);
+        stack_b = NULL;
 
-    // stack_add_back() — add node.
-    stack_add_back(&head, node);
+        // swap_a(stack_a);
+        // swap_b(stack_b);
+        // size = stack_size(stack_a);
+        
+        push_b(&stack_a, &stack_b);
+        push_b(&stack_a, &stack_b);
+        // push_b(&stack_a, &stack_b);
+        // push_a(&stack_a, &stack_b);
+        // swap_b(stack_b);
+        // swap_ab(stack_a, stack_b, swap_a, swap_b);
 
-    // stack_size() — count nodes.
-    size = stack_size(head);
+        // rotate_ab(&stack_a, &stack_b, rotate_a, rotate_b);
 
-    // stack_last() — get last node.
-    node = stack_last(head);
+        // rotate_b(&stack_b);
+        // rotate_a(&stack_a);
+        // reverse_rotate_a(&stack_a);
+        // reverse_rotate_b(&stack_b);
+        reverse_rotate_ab(&stack_a, &stack_b, reverse_rotate_a, reverse_rotate_b);
 
-    // stack_clear() — free stack.
-    stack_clear(&head);
+        ft_putstr_fd("\n-----STACK A-----\n", 1);
+        ft_lstiter(stack_a, print_stack);
+        size = ft_lstsize(stack_a);
+        printf("size of stack: %zu\n", size);
+        ft_putstr_fd("-----------------\n", 1);
+        
+
+        ft_putstr_fd("\n-----STACK B-----\n", 1);
+        ft_lstiter(stack_b, print_stack);
+        size = ft_lstsize(stack_b);
+        printf("size of stack: %zu\n", size);
+        ft_putstr_fd("-----------------\n", 1);
+
+
+        ft_lstclear(&stack_a, free_content);
+    }
+    else
+        ft_putstr_fd("Wrong number of arguments\n", 1);
 }
